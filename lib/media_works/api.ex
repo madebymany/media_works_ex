@@ -1,29 +1,29 @@
 defmodule MediaWorks.API do
-  alias MediaWorks.HTTP
   @valid_order_codes [0, 2]
+  @http Application.get_env(:media_works, :mw_api)
 
   def stores do
-    HTTP.post("/api/data/export_store")
+    @http.post("/api/data/export_store")
     |> parse_response
   end
 
   def store(store_id) do
-    HTTP.post("/api/data/export_store/" <> to_string(store_id))
+    @http.post("/api/data/export_store/" <> to_string(store_id))
     |> parse_response
   end
 
   def products do
-    HTTP.post("/api/data/export_product")
+    @http.post("/api/data/export_product")
     |> parse_response
   end
 
   def orders(store_id) do
-    HTTP.post("/api/data/export_orders/" <> to_string(store_id))
+    @http.post("/api/data/export_orders/" <> to_string(store_id))
     |> parse_response
   end
 
   def send_order(store_id, order) do
-    HTTP.post("/api/remote_ordering/" <> to_string(store_id), [body: order])
+    @http.post("/api/remote_ordering/" <> to_string(store_id), [body: order])
     |> parse_response
   end
 

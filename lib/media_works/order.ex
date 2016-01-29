@@ -1,5 +1,4 @@
 defmodule MediaWorks.Order do
-
   def to_xml(order),
     do: to_xml(order, [], [])
 

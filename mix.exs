@@ -27,9 +27,11 @@ defmodule MediaWorks.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.2"},
-     {:httpotion, "~> 2.1.0"},
-     {:poison, "~> 1.5"},
-     {:xml_builder, "~> 0.0.6"}]
+    [
+      {:ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.2"},
+      {:httpotion, "~> 2.1.0"},
+      {:poison, "~> 1.5"},
+      {:xml_builder, "~> 0.0.6"},
+    ]
   end
 end
