@@ -1,63 +1,46 @@
 defmodule MediaWorks.Order do
-  def to_xml(order),
-    do: to_xml(order, [], [])
+  alias MediaWorks.Utils
+  defstruct order_id: nil,
+            state_id: nil,
+            state: nil,
+            type_id: nil,
+            type: nil,
+            total_after_discount: nil,
+            custom_order_properties: %{},
+            total_amount: nil,
+            total_gross: nil,
+            total_tender: nil,
+            due_amount: nil,
+            discount_amount: nil,
+            order_discount_amount: nil,
+            tip: nil,
+            business_period: nil,
+            change: nil,
+            originator_id: nil,
+            pod_type: nil,
+            price_basis: nil,
+            sale_type: nil,
+            sale_type_descr: nil,
+            tenders: [],
+            sale_lines: []
 
-  def to_xml(order, tenders, sale_lines) do
-    order(order, tenders, sale_lines)
-    |> XmlBuilder.doc
-  end
+  def to_remote(%__MODULE__{} = order) do
+    tenders =
+      Map.get(order, :tenders, [])
+      |> Enum.map(&Utils.filter_nils(&1))
+      |> Utils.camelize_keys
 
-  defp order(order, tenders, sale_lines) do
-    XmlBuilder.element :Order,
-      camelize_keys(order),
-      order_body(tenders, sale_lines)
-  end
+    sale_lines =
+      Map.get(order, :sale_lines, [])
+      |> Enum.map(&Utils.filter_nils(&1))
+      |> Utils.camelize_keys
 
-  defp order_body(tenders, sale_lines) do
-    [tender_history(tenders), sale_lines(sale_lines)]
-    |> Enum.filter(fn v -> v != nil end)
-  end
+    order =
+      Map.from_struct(order)
+      |> Map.drop([:tenders, :sale_lines])
+      |> Utils.filter_nils
+      |> Utils.camelize_keys
 
-  defp sale_lines(sale_lines)
-    when is_map(sale_lines),
-    do: sale_lines([sale_lines])
-
-  defp sale_lines(sale_lines) do
-    Enum.map(sale_lines, &sale_line(&1))
-  end
-
-  defp sale_line(sale_line) do
-    XmlBuilder.element :SaleLine,
-      camelize_keys(sale_line)
-  end
-
-  defp tender_history(tenders)
-    when is_map(tenders),
-    do: tender_history([tenders])
-
-  defp tender_history(tenders) when length(tenders) > 0 do
-    XmlBuilder.element :TenderHistory, %{},
-      Enum.map(tenders, &tender(&1))
-  end
-
-  defp tender_history(tenders), do: nil
-
-  defp tender(tender) do
-    XmlBuilder.element :Tender,
-      camelize_keys(tender)
-  end
-
-  defp camelize_keys(body) do
-    Enum.map(body, fn {k, v} -> {camelize_key(k), v} end)
-    |> Enum.into(%{})
-  end
-
-  defp camelize_key(key)
-    when is_atom(key),
-    do: camelize_key(to_string(key))
-
-  defp camelize_key(key) do
-    [h|t] = key |> Macro.camelize |> String.codepoints
-    String.downcase(h) <> to_string(t)
+    %{order: order, saleLine: sale_lines, tender:  tenders}
   end
 end

@@ -1,47 +1,24 @@
 defmodule MediaWorks.API do
-  @valid_order_codes [0, 2]
-  @http Application.get_env(:media_works, :mw_api)
+  @client Application.get_env(:media_works, :api_client, MediaWorks.API.HTTP)
 
-  def stores do
-    @http.post("/api/data/export_store")
-    |> parse_response
-  end
+  @callback get_stores() ::
+    {:ok, [MediaWorks.Store.t]} | {:error, MediaWorks.Error.t}
 
-  def store(store_id) do
-    @http.post("/api/data/export_store/" <> to_string(store_id))
-    |> parse_response
-  end
+  @callback get_store(store_id :: String.t) ::
+    {:ok, MediaWorks.Store.t} | {:error, MediaWorks.Error.t}
 
-  def products do
-    @http.post("/api/data/export_product")
-    |> parse_response
-  end
+  @callback get_products() ::
+    {:ok, MediaWorks.ProductResponse.t} | {:error, MediaWorks.Error.t}
 
-  def orders(store_id) do
-    @http.post("/api/data/export_orders/" <> to_string(store_id))
-    |> parse_response
-  end
+  @callback send_order(store_id :: String.t, map) ::
+    {:ok, MediaWorks.SendOrderResponse.t} | {:error, MediaWorks.Error.t}
+
+  defdelegate get_stores, to: @client
+  defdelegate get_store(store_id), to: @client
+  defdelegate get_products, to: @client
 
   def send_order(store_id, order) do
-    @http.post("/api/remote_ordering/" <> to_string(store_id), [body: order])
-    |> parse_response
-  end
-
-  defp parse_response(%{body: %{code: code} = body, status_code: status_code})
-    when code in @valid_order_codes,
-    do: {:ok, body_with_status_code(body, status_code)}
-
-  defp parse_response(%{body: %{code: _code} = body, status_code: status_code}),
-    do: {:error, body_with_status_code(body, status_code)}
-
-  defp parse_response(%{body: body, status_code: status_code})
-    when status_code < 400,
-    do: {:ok, body_with_status_code(body, status_code)}
-
-  defp parse_response(%{body: body, status_code: status_code}),
-    do: {:error, body_with_status_code(body, status_code)}
-
-  defp body_with_status_code(body, status_code) do
-    body |> Map.put(:status_code, status_code)
+    order = order |> MediaWorks.Order.to_remote
+    @client.send_order(store_id, order)
   end
 end

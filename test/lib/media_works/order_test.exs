@@ -1,43 +1,39 @@
-defmodule MediaWorksOrderTest do
+defmodule MediaWorks.OrderTest do
   use ExUnit.Case
-  alias MediaWorks.Order, as: Subject
+  alias MediaWorks.Order
 
-  test "#to_xml(order) writes xml for an order" do
-    order = %{some: "thing"}
-    expectation = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<Order some=\"thing\">\n\n</Order>"
-    output = Subject.to_xml(order)
+  test "#to_remote will drop nil values from order" do
+    order = %Order{
+      order_id: nil,
+      state: "PAID"
+    }
 
-    assert output == expectation
+    %{order: remote_order} = Order.to_remote(order)
+    refute Map.has_key?(remote_order, :orderId)
   end
 
-  test "#to_xml(order, tenders, sale_lines) writes xml for an order" do
-    order = %{some: "thing"}
-    tenders = %{other: "thing"}
-    sale_lines = %{the_other: "thing"}
+  test "#to_remote will drop nil values from tenders" do
+    order = %Order{
+      tenders: [%{
+        tender_id: "1",
+        tender_type: nil
+      }]
+    }
 
-    expectation = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" <>
-    "\n<Order some=\"thing\">" <>
-    "\n\t<TenderHistory>\n\t\t" <>
-    "<Tender other=\"thing\"/>\n\t" <>
-    "</TenderHistory>\n\t" <>
-    "<SaleLine theOther=\"thing\"/>\n</Order>"
-
-    output = Subject.to_xml(order, tenders, sale_lines)
-
-    assert output == expectation
+    %{tender: tenders} = Order.to_remote(order)
+    refute Map.has_key?(List.first(tenders), :tenderType)
   end
 
-  test "#to_xml(orders, tenders, sale_lines) writes xml without tender history" do
-    order = %{some: "thing"}
-    tenders = []
-    sale_lines = %{the_other: "thing"}
+  test "#to_remote will drop nil values from sale_lines" do
+    order = %Order{
+      sale_lines: [%{
+        id: nil,
+        product_code: "1234"
+      }]
+    }
 
-    expectation = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" <>
-    "\n<Order some=\"thing\">\n\t" <>
-    "<SaleLine theOther=\"thing\"/>\n</Order>"
-
-    output = Subject.to_xml(order, tenders, sale_lines)
-
-    assert output == expectation
+    %{saleLine: sale_lines} = Order.to_remote(order)
+    refute Map.has_key?(List.first(sale_lines), :id)
   end
+
 end
