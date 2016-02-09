@@ -24,7 +24,7 @@ defmodule MediaWorks.Order do
             tenders: [],
             sale_lines: []
 
-  def to_remote(%__MODULE__{} = order) do
+  def to_remote_order(%__MODULE__{} = order) do
     tenders =
       Map.get(order, :tenders, [])
       |> Enum.map(&Utils.filter_nils(&1))
