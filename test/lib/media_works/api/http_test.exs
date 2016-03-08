@@ -12,7 +12,7 @@ defmodule MediaWorks.API.HTTPClientTest do
   test "#process_request_headers(headers) adds headers to the request" do
     custom_headers = ["Hello": "World"]
     expected_output = ["X-API-Key": "asdf",
-      Authorization: "Basic: YXNkZjphc2Rm",
+      Authorization: "Basic: asdf",
       Accept: "application/json",
       "Content-Type": "application/json",
       Hello: "World"]
@@ -22,7 +22,7 @@ defmodule MediaWorks.API.HTTPClientTest do
 
   test "#process_request_headers(headers) leaves headers alone if nothing is given" do
     expected_output = ["X-API-Key": "asdf",
-      Authorization: "Basic: YXNkZjphc2Rm",
+      Authorization: "Basic: asdf",
       Accept: "application/json",
       "Content-Type": "application/json"]
 

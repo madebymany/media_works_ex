@@ -1,6 +1,4 @@
 defmodule MediaWorks.Parser do
-  alias MediaWorks.Product
-  alias MediaWorks.ProductResponse
   alias MediaWorks.Error
   alias MediaWorks.Store
   alias MediaWorks.SendOrderResponse
@@ -31,19 +29,5 @@ defmodule MediaWorks.Parser do
 
   def parse_stores_response(stores) when is_list(stores) do
     Enum.map(stores, &struct(Store, &1))
-  end
-
-  def parse_products_response(%{result: result}) do
-    parse_products_response(result)
-  end
-
-  def parse_products_response(%{prices: prices, product_part: product_part,
-                                price_lists: price_lists, products: products}) do
-    struct(ProductResponse, %{
-      prices:        Enum.map(prices, &struct(Product.Price, &1)),
-      product_parts: Enum.map(product_part, &struct(Product.Part, &1)),
-      price_lists:   Enum.map(price_lists, &struct(Product.PriceList, &1)),
-      products:      Enum.map(products, &struct(Product, &1))
-    })
   end
 end

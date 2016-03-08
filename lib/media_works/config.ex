@@ -14,6 +14,11 @@ defmodule MediaWorks.Config do
     |> check_value
   end
 
+  def basic_auth do
+    Application.get_env(:media_works, :basic_auth, System.get_env("MW_BASIC_AUTH"))
+    |> check_value
+  end
+
   defp check_value(nil) do
     raise ArgumentError, message: "Invalid config value given"
   end

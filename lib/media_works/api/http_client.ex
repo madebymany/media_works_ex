@@ -11,11 +11,12 @@ defmodule MediaWorks.API.HTTPClient do
 
   def process_request_headers(custom_headers \\ []) do
     @headers ++ custom_headers
-    |> Keyword.put(:"Authorization", "Basic: #{basic_auth_header}")
+    |> Keyword.put(:"Authorization", "Basic: " <> Config.basic_auth)
     |> Keyword.put(:"X-API-Key", Config.api_key)
   end
 
-  def process_request_body(body), do: Poison.encode!(body)
+  def process_request_body("" = body), do: body
+  def process_request_body(body), do: Poison.encode(body)
 
   def process_response_body([] = body), do: body
   def process_response_body(body) do
@@ -24,9 +25,5 @@ defmodule MediaWorks.API.HTTPClient do
       {:ok, resp} -> resp
       {:error, _} -> %{desc: "Could not parse JSON response"}
     end
-  end
-
-  defp basic_auth_header do
-    :base64.encode_to_string("#{Config.username}:#{Config.password}")
   end
 end

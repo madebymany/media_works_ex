@@ -7,7 +7,7 @@ defmodule MediaWorks.API do
   @callback get_store(store_id :: String.t) ::
     {:ok, MediaWorks.Store.t} | {:error, MediaWorks.Error.t}
 
-  @callback get_products() ::
+  @callback get_products(store_id :: String.t) ::
     {:ok, MediaWorks.ProductResponse.t} | {:error, MediaWorks.Error.t}
 
   @callback send_order(store_id :: String.t, order :: MediaWorks.Order.t) ::
@@ -15,7 +15,7 @@ defmodule MediaWorks.API do
 
   defdelegate get_stores, to: @client
   defdelegate get_store(store_id), to: @client
-  defdelegate get_products, to: @client
+  defdelegate get_products(store_id), to: @client
 
   def send_order(store_id, order) do
     order = order |> MediaWorks.Order.to_remote
