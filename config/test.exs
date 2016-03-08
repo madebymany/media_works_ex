@@ -4,4 +4,5 @@ config :media_works,
   mw_api: MediaWorks.InMemory,
   username: "asdf",
   password: "asdf",
-  api_key: "asdf"
+  api_key: "asdf",
+  basic_auth: "asdf"

@@ -1,9 +1,9 @@
-defmodule MediaWorks.HTTP do
+defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
   @api_url "https://mw-central.appspot.com/"
   @headers ["Accept": "application/json",
-            "Content-Type": "application/xml"]
+            "Content-Type": "application/json"]
 
   def process_url(url) do
     @api_url <> url
@@ -11,9 +11,12 @@ defmodule MediaWorks.HTTP do
 
   def process_request_headers(custom_headers \\ []) do
     @headers ++ custom_headers
-    |> Keyword.put(:"Authorization", "Basic: #{basic_auth_header}")
+    |> Keyword.put(:"Authorization", "Basic: " <> Config.basic_auth)
     |> Keyword.put(:"X-API-Key", Config.api_key)
   end
+
+  def process_request_body("" = body), do: body
+  def process_request_body(body), do: Poison.encode(body)
 
   def process_response_body([] = body), do: body
   def process_response_body(body) do
@@ -22,9 +25,5 @@ defmodule MediaWorks.HTTP do
       {:ok, resp} -> resp
       {:error, _} -> %{desc: "Could not parse JSON response"}
     end
-  end
-
-  defp basic_auth_header do
-    :base64.encode_to_string("#{Config.username}:#{Config.password}")
   end
 end
