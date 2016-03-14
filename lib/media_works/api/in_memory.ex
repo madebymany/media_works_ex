@@ -1,6 +1,6 @@
 defmodule MediaWorks.API.InMemory do
   @behaviour MediaWorks.API
-  alias MediaWorks.{Store, ProductResponse, Price, PriceList, Product, SendOrderResponse, Error}
+  alias MediaWorks.{Store, ProductResponse, PriceList, Product, SendOrderResponse, Error, DatapumpResponse}
 
   def get_stores do
     {:ok, [%Store{id: "1234", store_id: "1", name: "Dummy store #1"},
@@ -18,6 +18,14 @@ defmodule MediaWorks.API.InMemory do
       price_lists: [%PriceList{}],
       product_parts: [%Product.Part{}],
     }}
+  end
+
+  def get_datapump(store_id, _timestamp) do
+    {:ok, %DatapumpResponse{store_id: store_id}}
+  end
+
+  def get_datapump(response) do
+    {:ok, %DatapumpResponse{store_id: response.store_id}}
   end
 
   def send_order(_store_id, %{order: %{orderId: 100000}}) do
