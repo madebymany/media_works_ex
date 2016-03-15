@@ -33,6 +33,21 @@ defmodule MediaWorks.API.HTTP do
     end
   end
 
+  def get_datapump(params), do: do_datapump_request(params)
+  def get_datapump(store_id, start_timestamp) do
+    do_datapump_request(%{"store_id" => store_id, "start_timestamp" => start_timestamp})
+  end
+
+  def do_datapump_request(%{"store_id" => store_id} = params) do
+    HTTPClient.get("/api/datapumps/?" <> URI.encode_query(params))
+    |> Parser.parse_server_response
+    |> case do
+      {:ok, body} ->
+        {:ok, Parser.parse_datapump_response(store_id, body)}
+      err -> err
+    end
+  end
+
   def send_order(store_id, order) do
     HTTPClient.post("/api/remote_ordering/" <> to_string(store_id), [body: order])
     |> Parser.parse_server_response
