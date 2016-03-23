@@ -36,8 +36,3 @@ MW_USERNAME=blah
 MW_PASSWORD=blah
 MW_API_KEY=blah-blah
 ```
-
-## Todo
-
-- [ ] Documentation
-- [ ] Tests
