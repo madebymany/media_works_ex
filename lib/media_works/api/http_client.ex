@@ -2,8 +2,10 @@ defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
   @api_url "https://mw-central.appspot.com/"
-  @headers ["Accept": "application/json",
-            "Content-Type": "application/json"]
+  @headers [
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  ]
 
   def process_url(url) do
     @api_url <> url
@@ -15,8 +17,8 @@ defmodule MediaWorks.API.HTTPClient do
     |> Keyword.put(:"X-API-Key", Config.api_key)
   end
 
-  def process_request_body("" = body), do: body
-  def process_request_body(body), do: Poison.encode(body)
+  def process_request_body(body) when is_binary(body), do: body
+  def process_request_body(body), do: Poison.encode!(body)
 
   def process_response_body([] = body), do: body
   def process_response_body(body) do

@@ -3,6 +3,8 @@ defmodule MediaWorks.API.HTTP do
   alias MediaWorks.API.HTTPClient
   alias MediaWorks.{Parser, ProductParser}
 
+  @timeout 30_000
+
   def get_stores do
     HTTPClient.post("/api/data/export_store")
     |> Parser.parse_server_response
@@ -24,7 +26,7 @@ defmodule MediaWorks.API.HTTP do
   end
 
   def get_products(store_id) do
-    HTTPClient.post("/api/data/export_product" <> to_string(store_id), [timeout: 30_000])
+    HTTPClient.post("/api/data/export_product" <> to_string(store_id), [timeout: @timeout])
     |> Parser.parse_server_response
     |> case do
       {:ok, body} ->
@@ -49,7 +51,7 @@ defmodule MediaWorks.API.HTTP do
   end
 
   def send_order(store_id, order) do
-    HTTPClient.post("/api/remote_ordering/" <> to_string(store_id), [body: order])
+    HTTPClient.post("/api/remote_ordering/" <> to_string(store_id), [body: order, timeout: @timeout])
     |> Parser.parse_server_response
     |> Parser.parse_send_order_response
   end
