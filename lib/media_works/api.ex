@@ -10,7 +10,7 @@ defmodule MediaWorks.API do
   @callback get_products(store_id :: String.t) ::
     {:ok, MediaWorks.ProductResponse.t} | {:error, MediaWorks.Error.t}
 
-  @callback send_order(store_id :: String.t, order :: MediaWorks.Order.t) ::
+  @callback send_order(store_id :: String.t, order :: MediaWorks.Order.t | map) ::
     {:ok, MediaWorks.SendOrderResponse.t} | {:error, MediaWorks.Error.t}
 
   @callback get_datapump(datapump :: MediaWorks.DatapumpResponse.t) ::
@@ -33,8 +33,13 @@ defmodule MediaWorks.API do
     |> @client.get_datapump
   end
 
-  def send_order(store_id, order) do
+  def send_order(store_id, %MediaWorks.Order{} = order) do
     order = order |> MediaWorks.Order.to_remote
     @client.send_order(store_id, order)
   end
+
+  def send_order(store_id, order) do
+    @client.send_order(store_id, order)
+  end
+
 end
