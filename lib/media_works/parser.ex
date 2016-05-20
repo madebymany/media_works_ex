@@ -37,7 +37,8 @@ defmodule MediaWorks.Parser do
       remote_host: response[:remoteHost],
       business_date: response[:businessDate],
       timestamp: response[:timestamp],
-      hmac: response[:hmac]
+      hmac: response[:hmac],
+      data: response[:data]
     })
   end
 

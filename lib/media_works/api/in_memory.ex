@@ -28,11 +28,12 @@ defmodule MediaWorks.API.InMemory do
     {:ok, %DatapumpResponse{store_id: response.store_id}}
   end
 
-  def send_order(_store_id, %{order: %{orderId: 100000}}) do
+  def send_order(100001, _) do
+    {:error, %Error{message: "Out of working hours"}}
+  end
+
+  def send_order(_, _) do
     {:ok, %SendOrderResponse{code: 0, desc: "Sent"}}
   end
 
-  def send_order(_store_id, %{order: %{orderId: 100001}}) do
-    {:error, %Error{message: "Out of working hours"}}
-  end
 end

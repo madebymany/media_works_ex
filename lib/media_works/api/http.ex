@@ -4,6 +4,9 @@ defmodule MediaWorks.API.HTTP do
   alias MediaWorks.{Parser, ProductParser}
 
   @timeout 30_000
+  @data_pump_default_params %{
+    "include_xml_data" => true
+  }
 
   def get_stores do
     HTTPClient.post("/api/data/export_store")
@@ -41,6 +44,8 @@ defmodule MediaWorks.API.HTTP do
   end
 
   def do_datapump_request(%{"store_id" => store_id} = params) do
+    params = Map.merge(@data_pump_default_params, params)
+
     HTTPClient.get("/api/datapumps/?" <> URI.encode_query(params))
     |> Parser.parse_server_response
     |> case do

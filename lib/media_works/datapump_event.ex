@@ -1,6 +1,7 @@
 defmodule MediaWorks.DatapumpEvent do
   defstruct event_id: nil,
             pos_id: nil,
+            data: nil,
             event_type: nil,
             remote_host: nil,
             business_date: nil,

@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :media_works,
-  mw_api: MediaWorks.InMemory,
+  api_client: MediaWorks.API.InMemory,
   username: "asdf",
   password: "asdf",
   api_key: "asdf",
