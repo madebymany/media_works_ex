@@ -33,7 +33,7 @@ defmodule MediaWorks.API.InMemory do
   end
 
   def send_order(_, _) do
-    {:ok, %SendOrderResponse{code: 0, desc: "Sent"}}
+    {:ok, %SendOrderResponse{code: 0, desc: "Sent", pos_order_id: 12345}}
   end
 
 end
