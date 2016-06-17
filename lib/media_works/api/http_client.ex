@@ -2,6 +2,7 @@ defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
   @api_url "https://mw-central.appspot.com/"
+  @timeout 120_000
   @headers [
     "Accept": "application/json",
     "Content-Type": "application/json"
@@ -19,6 +20,10 @@ defmodule MediaWorks.API.HTTPClient do
 
   def process_request_body(body) when is_binary(body), do: body
   def process_request_body(body), do: Poison.encode!(body)
+
+  def process_options(options \\ []) do
+    options ++ [timeout: 120_000]
+  end
 
   def process_response_body([] = body), do: body
   def process_response_body(body) do
