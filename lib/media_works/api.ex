@@ -16,14 +16,16 @@ defmodule MediaWorks.API do
   @callback get_datapump(datapump :: MediaWorks.DatapumpResponse.t) ::
     {:ok, MediaWorks.DatapumpResponse.t} | {:error, MediaWorks.Error.t}
 
-  @callback get_datapump(store_id :: Strig.t, start_timestamp :: String.t) ::
+  @callback get_datapump(params :: map) ::
+    {:ok, MediaWorks.DatapumpResponse.t} | {:error, MediaWorks.Error.t}
+
+  @callback get_datapump(store_id :: String.t, start_timestamp :: String.t) ::
     {:ok, MediaWorks.DatapumpResponse.t} | {:error, MediaWorks.Error.t}
 
   defdelegate get_stores, to: @client
   defdelegate get_store(store_id), to: @client
   defdelegate get_products(store_id), to: @client
   defdelegate get_datapump(store_id, start_timestamp), to: @client
-
   def get_datapump(%MediaWorks.DatapumpResponse{} = datapump) do
     [_ | next_params] =
       datapump.next_url
@@ -32,6 +34,7 @@ defmodule MediaWorks.API do
     URI.decode_query(next_params)
     |> @client.get_datapump
   end
+  defdelegate get_datapump(params), to: @client
 
   def send_order(store_id, %MediaWorks.Order{} = order) do
     order = order |> MediaWorks.Order.to_remote
