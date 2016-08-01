@@ -1,7 +1,6 @@
 defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
-  @api_url "https://mw-central.appspot.com/"
   @timeout 120_000
   @headers [
     "Accept": "application/json",
@@ -9,7 +8,7 @@ defmodule MediaWorks.API.HTTPClient do
   ]
 
   def process_url(url) do
-    @api_url <> url
+    Config.api_url <> url
   end
 
   def process_request_headers(custom_headers \\ []) do
