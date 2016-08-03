@@ -11,7 +11,7 @@ defmodule MediaWorks.API.HTTPClientTest do
 
   test "#process_url(url) expects a different url for remote_ordering endpoint" do
       url = "hello/remote_ordering"
-      expected_url = "https://fake-remote-ordering-dot-mw-central.appspot.com/hello/remote_ordering"
+      expected_url = "https://remote-ordering-dot-mw-central.appspot.com/hello/remote_ordering"
 
       assert HTTPClient.process_url(url) == expected_url
   end

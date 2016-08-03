@@ -5,5 +5,4 @@ config :media_works,
   username: "asdf",
   password: "asdf",
   api_key: "asdf",
-  basic_auth: "asdf",
-  api_url: "https://fake-remote-ordering-dot-mw-central.appspot.com/"
+  basic_auth: "asdf"
