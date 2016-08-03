@@ -2,13 +2,19 @@ defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
   @timeout 120_000
+  @default_api_url "https://mw-central.appspot.com/"
+  @remote_ordering_url "https://remote-ordering-dot-mw-central.appspot.com/"
+  @remote_ordering "remote_ordering"
   @headers [
     "Accept": "application/json",
     "Content-Type": "application/json"
   ]
 
   def process_url(url) do
-    Config.api_url <> url
+    case remote_ordering?(url)do
+      true -> @remote_ordering_url <> url
+      _ -> @default_api_url <> url
+    end
   end
 
   def process_request_headers(custom_headers \\ []) do
@@ -32,4 +38,6 @@ defmodule MediaWorks.API.HTTPClient do
       {:error, _} -> %{desc: "Could not parse JSON response"}
     end
   end
+
+  defp remote_ordering?(url), do: String.contains?(url, @remote_ordering)
 end

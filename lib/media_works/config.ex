@@ -19,10 +19,6 @@ defmodule MediaWorks.Config do
     |> check_value
   end
 
-  def api_url do
-    Application.get_env(:media_works, :api_url, "https://mw-central.appspot.com/")
-  end
-
   defp check_value(nil) do
     raise ArgumentError, message: "Invalid config value given"
   end
