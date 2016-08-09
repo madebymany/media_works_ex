@@ -1,7 +1,7 @@
 defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
-  @timeout 120_000
+  @timeout 60 * 5
   @default_api_url "https://mw-central.appspot.com/"
   @remote_ordering_url "https://remote-ordering-dot-mw-central.appspot.com/"
   @remote_ordering "remote_ordering"
@@ -27,7 +27,7 @@ defmodule MediaWorks.API.HTTPClient do
   def process_request_body(body), do: Poison.encode!(body)
 
   def process_options(options \\ []) do
-    options ++ [timeout: 120_000]
+    options ++ [timeout: @timeout]
   end
 
   def process_response_body([] = body), do: body
