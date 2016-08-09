@@ -1,7 +1,8 @@
 defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
-  @timeout 60 * 5
+  # 5 minutes in milliseconds
+  @timeout (60 * 5) * 1000
   @default_api_url "https://mw-central.appspot.com/"
   @remote_ordering_url "https://remote-ordering-dot-mw-central.appspot.com/"
   @remote_ordering "remote_ordering"
