@@ -1,8 +1,7 @@
 defmodule MediaWorks.API.HTTPClient do
   use HTTPotion.Base
   alias MediaWorks.Config
-  # 10 minutes in milliseconds
-  @timeout (60 * 10) * 1000
+  @timeout (60 * 2) * 1000
   @remote_ordering "remote_ordering"
   @headers [
     "Accept": "application/json",
