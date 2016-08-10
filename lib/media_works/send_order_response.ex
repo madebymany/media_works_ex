@@ -3,5 +3,5 @@ defmodule MediaWorks.SendOrderResponse do
   @valid_response_codes [0, 2]
 
   def success?(%{code: code}) when code in @valid_response_codes, do: true
-  def success?(%{code: code}), do: false
+  def success?(%{code: _}), do: false
 end
