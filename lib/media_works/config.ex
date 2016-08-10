@@ -19,6 +19,22 @@ defmodule MediaWorks.Config do
     |> check_value
   end
 
+  def remote_ordering_sessions do
+    Application.get_env(:media_works, :remote_ordering_sessions)
+  end
+
+  def remote_ordering_pipeline do
+    Application.get_env(:media_works, :remote_ordering_pipeline)
+  end
+
+  def remote_ordering_url do
+    Application.get_env(:media_works, :remote_ordering_url)
+  end
+
+  def api_url do
+    Application.get_env(:media_works, :api_url)
+  end
+
   defp check_value(nil) do
     raise ArgumentError, message: "Invalid config value given"
   end

@@ -3,8 +3,6 @@ defmodule MediaWorks.API.HTTPClient do
   alias MediaWorks.Config
   # 10 minutes in milliseconds
   @timeout (60 * 10) * 1000
-  @default_api_url "https://mw-central.appspot.com/"
-  @remote_ordering_url "https://remote-ordering-dot-mw-central.appspot.com/"
   @remote_ordering "remote_ordering"
   @headers [
     "Accept": "application/json",
@@ -13,8 +11,8 @@ defmodule MediaWorks.API.HTTPClient do
 
   def process_url(url) do
     case remote_ordering?(url)do
-      true -> @remote_ordering_url <> url
-      _ -> @default_api_url <> url
+      true -> Config.remote_ordering_url <> url
+      _ -> Config.api_url <> url
     end
   end
 

@@ -36,11 +36,6 @@ defmodule MediaWorks.API do
   end
   defdelegate get_datapump(params), to: @client
 
-  def send_order(store_id, %MediaWorks.Order{} = order) do
-    order = order |> MediaWorks.Order.to_remote
-    @client.send_order(store_id, order)
-  end
-
   def send_order(store_id, order) do
     @client.send_order(store_id, order)
   end
